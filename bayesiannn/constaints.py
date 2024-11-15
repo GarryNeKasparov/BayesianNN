@@ -1,0 +1,2 @@
+SEED = 42
+BATCH_SIZE = 16

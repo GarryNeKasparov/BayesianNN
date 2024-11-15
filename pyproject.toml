@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "bayesiannn"
+version = "0.1.0"
+description = "course work"
+authors = ["GarryNeKasparov <vip.vlad.f.2002@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.6"
+numpy = "^2.1.2"
+matplotlib = "^3.9.2"
+black = "^24.10.0"
+scipy = "^1.14.1"
+pre-commit = "^4.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
