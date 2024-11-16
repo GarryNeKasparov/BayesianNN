@@ -4,17 +4,6 @@ from bayesiannn.mh import MetropolisHastings, normal_proposal, normal_trans
 
 
 def normal_pdf(x: float, mu: float, sigma: float) -> float:
-    """
-    Simple normal distribution.
-
-    Args:
-        x : The value at which to evaluate the probability density function.
-        mu : The mean of the distribution.
-        sigma: The standard deviation of the distribution.
-
-    Returns
-        The probability density function value at x.
-    """
     return (
         1
         / (sigma * np.sqrt(2 * np.pi))
