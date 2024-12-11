@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Inference</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">Image Inference</div>
+        <div class="menu">
+            <a href="/">Home</a>
+            <a href="/upload/">Upload</a>
+            <a href="#help">Help</a>
+        </div>
+    </div>
+
+    <h1>Upload an Image for Inference</h1>
+    <form id="upload-form" action="/upload/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="loading-spinner" class="spinner-container" style="display: none;">
+        <div class="spinner"></div>
+        <p>Processing your image...</p>
+    </div>
+
+    <script>
+        const form = document.getElementById("upload-form");
+        const spinner = document.getElementById("loading-spinner");
+
+        form.addEventListener("submit", () => {
+            spinner.style.display = "flex";
+        });
+    </script>
+</body>
+
+</html>

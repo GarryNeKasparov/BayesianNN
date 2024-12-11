@@ -1,5 +1,13 @@
 {
     "python.analysis.extraPaths": [
         "./bayesiannn"
+    ],
+    "[python]": {
+        "files.trimTrailingWhitespace": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "black-formatter.args": [
+        "--line-length=79"
     ]
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inference Results</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">Image Inference</div>
+        <div class="menu">
+            <a href="/">Home</a>
+        </div>
+    </div>
+
+    <h1>Inference Results</h1>
+    <div class="main-container">
+        <div class="input-container">
+            <h2>Input Image</h2>
+            <img src="{{ input_image }}" alt="Input Image">
+        </div>
+
+        <div class="output-container">
+            <h2>Mean Prediction (Mask Overlay)</h2>
+            <img src="{{ input_image }}" alt="Input Image (Background)">
+            <img class="mean-prediction" src="{{ mean_prediction }}" alt="Mean Prediction">
+        </div>
+    </div>
+
+    <button id="show-predictions">Show Individual Predictions</button>
+
+    <div class="predictions" id="predictions-container">
+        {% for prediction in individual_predictions %}
+        <div class="prediction">
+            <img src="{{ prediction }}" alt="Prediction {{ loop.index }}">
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        const button = document.getElementById("show-predictions");
+        const predictionsContainer = document.getElementById("predictions-container");
+
+        button.addEventListener("click", () => {
+            if (predictionsContainer.style.display === "none" || predictionsContainer.style.display === "") {
+                predictionsContainer.style.display = "flex";
+                button.textContent = "Hide Individual Predictions";
+            } else {
+                predictionsContainer.style.display = "none";
+                button.textContent = "Show Individual Predictions";
+            }
+        });
+    </script>
+</body>
+
+</html>
