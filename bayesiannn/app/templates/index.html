@@ -4,29 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Inference</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Tumor Segmentation App</title>
+    <link rel="stylesheet" href="/static/css/index.css">
 </head>
 
 <body>
     <div class="navbar">
-        <div class="logo">Image Inference</div>
-        <div class="menu">
-            <a href="/">Home</a>
-            <a href="/upload/">Upload</a>
-            <a href="#help">Help</a>
-        </div>
+        <div class="logo">Tumor Segmentation App</div>
     </div>
 
-    <h1>Upload an Image for Inference</h1>
-    <form id="upload-form" action="/upload/" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" required>
-        <button type="submit">Upload</button>
-    </form>
+    <main>
+        <h1>Upload an image for segmentation</h1>
+        <form id="upload-form" action="/upload/" method="post" enctype="multipart/form-data">
+            <label for="file-input" class="file-label">Select Image</label>
+            <input id="file-input" type="file" name="file" accept="image/*" required>
+            <button type="submit">Upload</button>
+        </form>
+
+
+    </main>
 
     <div id="loading-spinner" class="spinner-container" style="display: none;">
         <div class="spinner"></div>
-        <p>Processing your image...</p>
+        <p>Processing image...</p>
     </div>
 
     <script>

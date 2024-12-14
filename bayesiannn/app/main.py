@@ -2,17 +2,19 @@ import os
 import shutil
 from pathlib import Path
 
+import albumentations as A
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
+from albumentations.pytorch import ToTensorV2
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from PIL import Image
 from pyro.infer import Predictive
-from torchvision import transforms
 
 from bayesiannn.models.Unet import Unet
 
@@ -28,17 +30,19 @@ def load_model(app: FastAPI):
 
     try:
         model = Unet(bayesian=True)
-        params = torch.load(MODEL_PATH)
-        model.load_state_dict(torch.load("../models/raw.pt"))
-        guide = params["guide"]
+        model.load_state_dict(torch.load("../models/weights.pt"))
+        guide = torch.load("../models/guide_weights.pt")
+        # params = torch.load(MODEL_PATH)
+        # model.load_state_dict(torch.load("../models/raw.pt"))
+        # guide = params["guide"]
         model = Predictive(
             model, num_samples=10, guide=guide, return_sites=("obs", "_RETURN")
         )
-        transform = transforms.Compose(
+        transform = A.Compose(
             [
-                transforms.Resize((64, 64)),
-                transforms.ToTensor(),
-                transforms.Normalize([0.5, 0.5, 0.5], [1, 1, 1]),
+                A.Resize(256, 256),
+                A.Normalize(mean=[0.5, 0.5, 0.5], std=[1, 1, 1]),
+                ToTensorV2(),
             ]
         )
         print("Model loaded successfully.")
@@ -56,15 +60,16 @@ templates = Jinja2Templates(directory="templates")
 
 
 def preprocess_image(image: Image.Image):
-    return transform(image).unsqueeze(0)
+    return transform(image=image)["image"].unsqueeze(0)
 
 
 def run_inference(model: Unet, image_tensor: torch.Tensor) -> np.ndarray:
     with torch.no_grad():
         try:
             output = model(image_tensor)
-            print(output["obs"].size())
+            print(output["obs"].shape)
             output = output["obs"].squeeze(1).squeeze(1)
+            print(output.shape)
             k_predictions = output.numpy()
         except HTTPException as e:
             print(status_code=500, detail=f"Model prediction failed: {str(e)}")
@@ -78,14 +83,17 @@ async def home(request: Request):
 
 @app.post("/upload/", response_class=HTMLResponse)
 async def upload_file(request: Request, file: UploadFile = File(...)):
+    global model
+
     upload_dir = Path("uploads")
     upload_dir.mkdir(exist_ok=True)
     file_path = upload_dir / file.filename
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    image = Image.open(file_path).convert("RGB")
+    image = cv2.imread(file_path)
     input_tensor = preprocess_image(image)
+    print(input_tensor.mean())
 
     predictions = run_inference(model, input_tensor)
     mean_prediction = predictions.mean(axis=0).squeeze()
@@ -94,12 +102,14 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     input_image_path = output_dir / "input_image.png"
-    image.save(input_image_path)
+    cv2.imwrite(input_image_path, image)
 
     mean_prediction_path = output_dir / "mean_prediction.png"
+    plot_image = input_tensor.squeeze(0).numpy().transpose(1, 2, 0) + 0.5
     fig, ax = plt.subplots(1, 1, figsize=(10, 5))
-    ax.imshow(mean_prediction.numpy(), cmap="gray")
-    ax.imshow(input_tensor.squeeze(0).numpy().transpose(1, 2, 0))
+    ax.imshow(plot_image)
+    ax.imshow(mean_prediction, alpha=0.5)
+
     plt.axis("off")
     fig.savefig(mean_prediction_path, bbox_inches="tight", pad_inches=0)
     plt.close()
@@ -108,8 +118,8 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     for i, prediction in enumerate(predictions):
         pred_path = output_dir / f"prediction_{i}.png"
         fig, ax = plt.subplots(1, 1, figsize=(10, 5))
-        ax.imshow(prediction.squeeze().numpy(), cmap="gray")
-        ax.imshow(input_tensor.squeeze(0).numpy().transpose(1, 2, 0))
+        ax.imshow(plot_image)
+        ax.imshow(prediction.squeeze(), alpha=0.5)
         plt.axis("off")
         fig.savefig(pred_path, bbox_inches="tight", pad_inches=0)
         plt.close()
