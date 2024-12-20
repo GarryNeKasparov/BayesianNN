@@ -218,8 +218,8 @@ def plot_chains(x: np.ndarray, y: np.ndarray, chains: list):
         col = i % ncols
         predictions = np.asarray([get_model(theta)(x) for theta in chain])
         mean_prediction = np.mean(predictions, axis=0)
-        upper_bound = np.percentile(predictions, 95, axis=0)
-        lower_bound = np.percentile(predictions, 5, axis=0)
+        upper_bound = np.percentile(predictions, 97.5, axis=0)
+        lower_bound = np.percentile(predictions, 2.5, axis=0)
 
         ax[row][col].plot(x, y, color="blue", label="Истинные данные")
         ax[row][col].plot(

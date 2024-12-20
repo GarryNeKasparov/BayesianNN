@@ -1,0 +1,110 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+    padding: 0 20px;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+}
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.navbar .menu {
+    position: absolute;
+    margin-left: 90%;
+}
+.navbar .menu a {
+    text-decoration: none;
+    color: white;
+    margin-left: 50%;
+    font-size: 1rem;
+    margin-left: 20px;
+}
+.navbar .menu a:hover {
+    text-decoration: underline;
+}
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+}
+.main-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    border-radius: 10px;
+    max-width: 1000px;
+}
+.input-container, .output-container {
+    text-align: center;
+    width: 45%;
+}
+.input-container img, .output-container img, .prediction img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.output-container img.mean-prediction {
+    border-radius: 8px;
+}
+button#show-predictions {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+button#show-predictions:hover {
+    background-color: #45a049;
+}
+.predictions {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+.prediction {
+    max-width: calc(33% - 20px);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+   }
+    .input-container, .output-container {
+        width: 90%;
+   }
+    .prediction {
+        max-width: 80%;
+   }
+}

@@ -5,33 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inference Results</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/results.css">
 </head>
 
 <body>
     <div class="navbar">
-        <div class="logo">Image Inference</div>
+        <div class="logo">Tumor Segmentation</div>
         <div class="menu">
-            <a href="/">Home</a>
+            <a href="/">Back</a>
         </div>
     </div>
-
     <h1>Inference Results</h1>
     <div class="main-container">
         <div class="input-container">
             <h2>Input Image</h2>
             <img src="{{ input_image }}" alt="Input Image">
         </div>
-
         <div class="output-container">
-            <h2>Mean Prediction (Mask Overlay)</h2>
-            <img src="{{ input_image }}" alt="Input Image (Background)">
+            <h2>Mean prediction</h2>
             <img class="mean-prediction" src="{{ mean_prediction }}" alt="Mean Prediction">
         </div>
     </div>
-
-    <button id="show-predictions">Show Individual Predictions</button>
-
+    <button id="show-predictions">Show individual predictions</button>
     <div class="predictions" id="predictions-container">
         {% for prediction in individual_predictions %}
         <div class="prediction">
@@ -39,21 +34,7 @@
         </div>
         {% endfor %}
     </div>
-
-    <script>
-        const button = document.getElementById("show-predictions");
-        const predictionsContainer = document.getElementById("predictions-container");
-
-        button.addEventListener("click", () => {
-            if (predictionsContainer.style.display === "none" || predictionsContainer.style.display === "") {
-                predictionsContainer.style.display = "flex";
-                button.textContent = "Hide Individual Predictions";
-            } else {
-                predictionsContainer.style.display = "none";
-                button.textContent = "Show Individual Predictions";
-            }
-        });
-    </script>
+    <script src="/static/js/results.js"></script>
 </body>
 
 </html>

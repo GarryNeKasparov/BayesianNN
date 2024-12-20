@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "course work"
 authors = ["GarryNeKasparov <vip.vlad.f.2002@mail.ru>"]
 readme = "README.md"
+packages = [
+    { include = "bayesiannn" }
+]
 
 [tool.poetry.dependencies]
 python = "3.12.6"
